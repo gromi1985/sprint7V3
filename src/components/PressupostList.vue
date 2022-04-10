@@ -1,0 +1,46 @@
+<template>
+  <div class="w-100">
+    <div
+      class="d-flex w-100 justify-content-around border-top border-3 align-items-center py-2"
+      v-for="(item, index) in regSave"
+      :key="index"
+    >
+      <p class="mb-0">{{ item.idPresup }}</p>
+      <p class="mb-0">{{ item.idClient }}</p>
+    </div>
+    <p>Total Registros : {{ totalItemsRead }}</p>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "PressupostList",
+  props: ["regSave", "sortItems"],
+  data() {
+    return {
+      dataStorage: "",
+      totalItemsRead: 0,
+      regSaveCpy: "",
+    };
+  },
+  methods: {
+    recoveryLocalStorage() {
+      if (typeof Storage !== "undefined") {
+        this.dataStorage = JSON.parse(localStorage.getItem("listaPresupuesto"));
+        if (this.dataStorage != null)
+          this.totalItemsRead = this.dataStorage.length;
+      }
+
+      return this.dataStorage;
+    },
+  },
+  mounted() {
+    console.log("estamos montando...");
+    if (typeof Storage !== "undefined") {
+      this.regSaveCpy = JSON.parse(localStorage.getItem("listaPresupuesto"));
+      if (this.regSaveCpy != null)
+        this.$emit("newUpdateRegSave", this.regSaveCpy);
+    }
+  },
+};
+</script>
