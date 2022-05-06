@@ -15,7 +15,7 @@
 <script>
 export default {
   name: "PressupostList",
-  props: ["regSave", "sortItems"],
+  props: ["regSave"],
   data() {
     return {
       dataStorage: "",
@@ -23,23 +23,25 @@ export default {
       regSaveCpy: "",
     };
   },
-  methods: {
-    recoveryLocalStorage() {
-      if (typeof Storage !== "undefined") {
-        this.dataStorage = JSON.parse(localStorage.getItem("listaPresupuesto"));
-        if (this.dataStorage != null)
-          this.totalItemsRead = this.dataStorage.length;
-      }
+  // methods: {
+  //   recoveryLocalStorage() {
+  //     if (typeof Storage !== "undefined") {
+  //       this.dataStorage = JSON.parse(localStorage.getItem("listaPresupuesto"));
+  //       if (this.dataStorage != null)
+  //         this.totalItemsRead = this.dataStorage.length;
+  //     }
 
-      return this.dataStorage;
-    },
-  },
+  //     return this.dataStorage;
+  //   },
+  // },
   mounted() {
-    console.log("estamos montando...");
+    console.log("estamos montando PressupostList...");
     if (typeof Storage !== "undefined") {
       this.regSaveCpy = JSON.parse(localStorage.getItem("listaPresupuesto"));
-      if (this.regSaveCpy != null)
+      if (this.regSaveCpy != null) {
+        console.log("Se lanza evento newUpdateRegSave");
         this.$emit("newUpdateRegSave", this.regSaveCpy);
+      }
     }
   },
 };

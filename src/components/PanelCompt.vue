@@ -7,11 +7,11 @@
       <ElementalComp
         idElement="firstElement"
         nameElement="page"
-        @newChange="addCantidad"
         index="0"
         idModal="numPage"
+        v-model="valuePageP"
+        :flagSearch="numFlag"
       />
-      <!-- </div> -->
     </div>
 
     <div class="d-flex justify-content-center flex-wrap">
@@ -21,7 +21,9 @@
         nameElement="idioma"
         @newChange="addCantidad"
         index="1"
-        idModal="numLenguaje"
+        idModal="numLenguage"
+        v-model="valueLenguageP"
+        :flagSearch="numFlag"
       />
     </div>
   </div>
@@ -32,6 +34,7 @@ import ElementalComp from "@/components/ElementalComp";
 
 export default {
   name: "PanelComponent",
+  props: ["numFlag", "numPageValue", "numLenguageValue"],
   components: {
     ElementalComp,
   },
@@ -54,6 +57,28 @@ export default {
         this.totalPartial *= 30;
         this.$emit("totalAdd", this.totalPartial, this.fieldsPanel);
       }
+    },
+  },
+  computed: {
+    valuePageP: {
+      get() {
+        console.log("UNOOO1:valuePageP");
+        return this.numPageValue;
+      },
+      set(newValue) {
+        console.log("DOOOOO1:valuePageP" + newValue);
+        this.$emit("update:numPageValue", newValue);
+      },
+    },
+    valueLenguageP: {
+      get() {
+        console.log("UNOOO2:");
+        return this.numLenguageValue;
+      },
+      set(newValue) {
+        console.log("DOOOOO2:" + newValue);
+        this.$emit("update:numLenguageValue", newValue);
+      },
     },
   },
 };

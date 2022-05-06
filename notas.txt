@@ -31,3 +31,47 @@ Plugin que instalo
 ==========
 v-if="(post.id % 2 == 0)" > {{post-id}}</li>
 
+
+Que tipo de datos devuelve el localstorage
+const usuario = {
+    nombres: "Pedro Antonio",
+    apellidos: "Perez Torres",
+    edad: 29
+}
+ 
+// Almacenar en localStorage 
+localStorage.setItem("datosUsuario", JSON.stringify(usuario));
+ 
+// Obtener los datos desde localStorage
+const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
+ 
+ 
+console.log(datosUsuario); // Ver dato
+
+typeof datosUsuario
+
+
+
+////
+const usuario = [{
+    nombres: "Pedro Antonio",
+    apellidos: "Perez Torres",
+    edad: 29}, {
+    nombres: "Pedro Antonio1",
+    apellidos: "Perez Torres1",
+    edad: 30}]
+
+ 
+// Almacenar en localStorage 
+localStorage.setItem("datosUsuario", JSON.stringify(usuario));
+ 
+// Obtener los datos desde localStorage
+const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
+ 
+ 
+console.log(datosUsuario); // Ver dato
+VM40769:17 (2) [{…}, {…}]0: {nombres: 'Pedro Antonio', apellidos: 'Perez Torres', edad: 29}1: {nombres: 'Pedro Antonio1', apellidos: 'Perez Torres1', edad: 30}length: 2[[Prototype]]: Array(0)
+undefined
+typeof datosUsuario
+'object'
+

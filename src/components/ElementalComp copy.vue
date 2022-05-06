@@ -1,16 +1,29 @@
 <template>
   <div class="d-flex">
-    <button class="bg-warning border-0" @click="valueField++">+</button>
+    <button class="bg-warning border-0" @click="changeCantidad(0)">+</button>
     <input
+      v-if="flagSearch"
       class="ps-2 border-0"
       :id="idElement"
       type="text"
       :name="nameElement"
-      v-model="valueField"
+      v-model="fieldsPanel"
+      @change="changeCantidad(2)"
       :index="index"
       size="5"
     />
-    <button class="bg-warning border-0" @click="valueField--">-</button>
+    <input
+      v-else
+      class="ps-2 border-0"
+      :id="idElement"
+      type="text"
+      :name="nameElement"
+      :value="numData"
+      @change="changeCantidad(2)"
+      :index="index"
+      size="5"
+    />
+    <button class="bg-warning border-0" @click="changeCantidad(1)">-</button>
 
     <!-- Button trigger modal -->
     <button
@@ -63,6 +76,23 @@ export default {
     };
   },
   methods: {
+    changeCantidad(option) {
+      switch (option) {
+        case 0:
+          ++this.fieldsPanel;
+          break;
+        case 1:
+          if (this.fieldsPanel > 0) --this.fieldsPanel;
+          break;
+        case 2:
+          if (!this.valideFieldPattern(this.fieldsPanel)) this.fieldsPanel = 0;
+          break;
+        default:
+      }
+      console.log("this.index:" + this.index);
+      if (this.fieldsPanel >= 0)
+        this.$emit("newChange", this.fieldsPanel, this.index);
+    },
     valideFieldPattern(value) {
       var patron = /^[0-9]{1,6}$/;
       return patron.test(value);
@@ -79,15 +109,14 @@ export default {
     idButtonModel() {
       return "button-modal-" + this.index;
     },
-    valueField: {
+    value: {
       get() {
-        console.log("get:valueField()");
+        console.log("UNOOOO");
         return this.modelValue;
       },
-      // Si el numero es negativo, seteo el nuevo valor como 0
-      set(newValue) {
-        if (newValue < 0) newValue = 0;
-        this.$emit("update:modelValue", newValue);
+      set(value) {
+        console.log("DOOOOOS");
+        this.$emit("update:modelValue", value);
       },
     },
   },
