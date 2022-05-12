@@ -5,7 +5,6 @@
       class="ps-2 border-0"
       :id="idElement"
       type="text"
-      :name="nameElement"
       v-model="valueField"
       :index="index"
       size="5"
@@ -48,14 +47,7 @@
 <script>
 export default {
   name: "ElementalComp",
-  props: [
-    "idElement",
-    "nameElement",
-    "index",
-    "idModal",
-    "modelValue",
-    "flagSearch",
-  ],
+  props: ["idElement", "index", "idModal", "modelValue"],
   data() {
     return {
       fieldsPanel: 0,

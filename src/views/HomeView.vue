@@ -123,18 +123,6 @@ export default {
     return {
       modelInput: "",
       errSearch: false,
-      // flagReset: false,
-      // checkedNames: [
-      //   { id: 0, checked: false, value: "500" },
-      //   { id: 1, checked: false, value: "300" },
-      //   { id: 2, checked: false, value: "200" },
-      // ],
-      // dataPanel: [0, 0],
-      // initParam: false,
-      // flagNum: false,
-      // totalA: 0,
-      // totalB: 0,
-      // dataItems: [],
       dataSaved: [],
       dataSearch: [],
       itemPresup: {
@@ -210,7 +198,6 @@ export default {
     // Una vez insertado el nuevo registro en el localstorage limpiamos la variable que se utiliza para la insercion de los datos en el arreglo.
     initElement() {
       console.log("initElement");
-      // this.dataSaved = [];
       this.itemPresup = {
         idPresup: "",
         idClient: "",
@@ -235,15 +222,10 @@ export default {
       ) {
         console.log("Entro por datItems");
 
-        // let flagControl = false;
-        // if (this.totalSum <= 0) flagControl = true;
-
-        // if (!flagControl) {
         this.addLocalStorage();
         // Una vez agregado el nuevo registro al localstorage reseteamos todas todas las variables
         console.log("Estamos aqui");
         this.initElement();
-        // }
       }
     },
     cargaDataInitial(value) {
@@ -258,7 +240,6 @@ export default {
     },
     cargaInfoData(value) {
       console.log("cargaInfoData:" + value);
-      // this.initElement();
       if (typeof Storage !== "undefined") {
         var recoverDataLS = JSON.parse(
           localStorage.getItem("listaPresupuesto")
@@ -329,9 +310,6 @@ export default {
       return totalPartial;
     },
   },
-  // mounted() {
-  //   this.initElement();
-  // },
 };
 </script>
 <style scoped>

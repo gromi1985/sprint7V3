@@ -6,11 +6,9 @@
       <!-- <div class="d-flex justify-content-end"> -->
       <ElementalComp
         idElement="firstElement"
-        nameElement="page"
         index="0"
         idModal="numPage"
         v-model="valuePageP"
-        :flagSearch="numFlag"
       />
     </div>
 
@@ -18,11 +16,9 @@
       <label class="me-2" for="idioma"> Numero de idiomas</label>
       <ElementalComp
         idElement="secondElement"
-        nameElement="idioma"
         index="1"
         idModal="numLenguage"
         v-model="valueLenguageP"
-        :flagSearch="numFlag"
       />
     </div>
   </div>
