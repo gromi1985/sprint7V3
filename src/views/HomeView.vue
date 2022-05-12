@@ -1,6 +1,7 @@
 <template>
   <div class="border border-1 border-primary">
     <!-- newSearchRegSave Evento que me envia el componente SearchCompt-->
+    <p v-show="errSearch">No existe elemento indicado</p>
     <SearchCompt @newSearchRegSave="cargaInfoData" v-model="modelInput" />
     <div class="grid-layout p-3">
       <!-- Utilizo v-model con input de tipo checkbox, puedo colocar el value en el tag -->
@@ -10,11 +11,11 @@
           <div id="infoPresp" class="d-flex justify-content-around">
             <div class="text-start me-3">
               <label for="idPres">id-Presupuesto</label>
-              <input id="idPres" v-model="dataItems[0]" />
+              <input id="idPres" v-model="itemPresup.idPresup" />
             </div>
             <div class="text-start">
               <label for="idClient">id-Cliente</label>
-              <input id="idClient" v-model="dataItems[1]" />
+              <input id="idClient" v-model="itemPresup.idClient" />
             </div>
           </div>
 
@@ -24,18 +25,16 @@
               <input
                 type="checkbox"
                 name="pagWeb"
-                v-model="checkedNames[0].checked"
-                v-bind:id="checkedNames[0].id"
-                @change="sumaImportes(1)"
+                v-model="itemPresup.checkedNames[0].checked"
+                v-bind:id="itemPresup.checkedNames[0].id"
               />
               <label class="ps-2 text-start" for="pagWeb">
                 Una pàgina web (500€)</label
               ><br />
             </div>
+            <!-- Con v-show controlo que se desplegue o no el componentes de paginas y lenguajes -->
             <PanelComponent
-              @totalAdd="newSum"
-              v-if="flagNum"
-              :numFlag="flagNum"
+              v-show="itemPresup.checkedNames[0].checked"
               v-model:numPageValue="itemPresup.infoDataF.numPages"
               v-model:numLenguageValue="itemPresup.infoDataF.numLenguag"
             />
@@ -43,9 +42,8 @@
               <input
                 type="checkbox"
                 name="conSeo"
-                v-model="checkedNames[1].checked"
-                v-bind:id="checkedNames[1].id"
-                @change="sumaImportes(0)"
+                v-model="itemPresup.checkedNames[1].checked"
+                v-bind:id="itemPresup.checkedNames[1].id"
               />
               <label class="ps-2 text-start" for="conSeo">
                 Una consultoria SEO(300€)</label
@@ -56,16 +54,15 @@
               <input
                 type="checkbox"
                 name="camGads"
-                v-model="checkedNames[2].checked"
-                v-bind:id="checkedNames[2].id"
-                @change="sumaImportes(0)"
+                v-model="itemPresup.checkedNames[2].checked"
+                v-bind:id="itemPresup.checkedNames[2].id"
               />
               <label class="ps-2 text-start" for="conSeo"
                 >Una campaña de Google Ads (200€)</label
               ><br />
             </div>
           </div>
-          <p class="text-start">Importe: {{ totalSum }}</p>
+          <p class="text-start">Importe: {{ totalSumA }}</p>
           <button>
             <router-link to="/bienvenida">Back</router-link>
           </button>
@@ -125,26 +122,29 @@ export default {
   data() {
     return {
       modelInput: "",
+      errSearch: false,
       // flagReset: false,
-      optionSort: 0,
-      renderComponent: true,
-      totalSum: 0,
-      checkedNames: [
-        { id: 0, checked: false, value: "500" },
-        { id: 1, checked: false, value: "300" },
-        { id: 2, checked: false, value: "200" },
-      ],
-      dataPanel: [0, 0],
-      initParam: false,
-      flagNum: false,
-      totalA: 0,
-      totalB: 0,
-      dataItems: [],
+      // checkedNames: [
+      //   { id: 0, checked: false, value: "500" },
+      //   { id: 1, checked: false, value: "300" },
+      //   { id: 2, checked: false, value: "200" },
+      // ],
+      // dataPanel: [0, 0],
+      // initParam: false,
+      // flagNum: false,
+      // totalA: 0,
+      // totalB: 0,
+      // dataItems: [],
       dataSaved: [],
+      dataSearch: [],
       itemPresup: {
-        idPresup: "0",
-        idClient: "0",
-        checked: [],
+        idPresup: "",
+        idClient: "",
+        checkedNames: [
+          { id: 0, checked: false, value: "500" },
+          { id: 1, checked: false, value: "300" },
+          { id: 2, checked: false, value: "200" },
+        ],
         infoDataF: {
           numPages: 0,
           numLenguag: 0,
@@ -154,9 +154,6 @@ export default {
     };
   },
   methods: {
-    // updateFlagReset() {
-    //   this.flagReset = false;
-    // },
     // Agregamos el nuevo registro al arreglo almacenado en el localstorage
     addLocalStorage() {
       console.log("addLocalStorage");
@@ -164,6 +161,7 @@ export default {
         this.dataSaved = JSON.parse(localStorage.getItem("listaPresupuesto"));
         console.log("Oido cocina");
         console.log(this.dataSaved);
+        console.log(this.itemPresup);
         // Recupero los datos guardados en el localstorage para agregar el nuevo item de presupuesto
         // Al nuevo item a insertar le agrego la fecha de insercion
         this.itemPresup.fechaInsercion = new Date();
@@ -212,123 +210,128 @@ export default {
     // Una vez insertado el nuevo registro en el localstorage limpiamos la variable que se utiliza para la insercion de los datos en el arreglo.
     initElement() {
       console.log("initElement");
+      // this.dataSaved = [];
       this.itemPresup = {
-        idPresup: "0",
-        idClient: "0",
-        checked: [],
+        idPresup: "",
+        idClient: "",
+        checkedNames: [
+          { id: 0, checked: false, value: "500" },
+          { id: 1, checked: false, value: "300" },
+          { id: 2, checked: false, value: "200" },
+        ],
         infoDataF: {
           numPages: 0,
           numLenguag: 0,
         },
       };
     },
-    clearScreen() {
-      console.log("clearScreen");
-      this.totalSum = 0;
-      this.dataItems = [];
-      this.checkedNames = [
-        { id: 0, checked: false, value: "500" },
-        { id: 1, checked: false, value: "300" },
-        { id: 2, checked: false, value: "200" },
-      ];
-      this.flagNum = false;
-      this.initParam = true;
-    },
-    sumaImportes(option) {
-      console.log("sumaImportes");
-      this.totalA = 0;
-      if (option == "1") this.flagNum = !this.flagNum;
-      if (!this.flagNum) this.totalB = 0;
-
-      for (let indexId in this.checkedNames) {
-        if (this.checkedNames[indexId].checked == true)
-          this.totalA += parseInt(this.checkedNames[indexId].value);
-      }
-      this.totalSum = this.totalA + this.totalB;
-    },
-    newSum(totalPartial, fieldsPanel) {
-      console.log("newSum");
-      this.totalB = totalPartial;
-      this.totalSum = totalPartial + this.totalA;
-      this.itemPresup.infoDataF.numPages = fieldsPanel[0];
-      this.itemPresup.infoDataF.numLenguag = fieldsPanel[1];
-    },
+    // Antes de guardar un nuevo registro valido los datos
     valideFieldPattern() {
       console.log("valideFieldPattern");
-      if (this.dataItems.length == 2) {
+      var patron = /^[0-9A-Za-z]{1,6}$/;
+      if (
+        patron.test(this.itemPresup.idPresup) &&
+        patron.test(this.itemPresup.idClient)
+      ) {
         console.log("Entro por datItems");
-        var patron = /^[0-9A-Za-z]{1,6}$/;
 
-        let flagControl = false;
-        for (let e of this.dataItems)
-          if (!patron.test(e) || e == 0 || this.totalSum <= 0)
-            flagControl = true;
+        // let flagControl = false;
+        // if (this.totalSum <= 0) flagControl = true;
 
-        if (!flagControl) {
-          console.log("Pasamos el filtro");
-          console.log(typeof this.dataItems[0]);
-          this.itemPresup.idPresup = this.dataItems[0];
-          this.itemPresup.idClient = this.dataItems[1];
-
-          console.log(this.itemPresup.idPresup);
-          console.log(this.itemPresup.idClient);
-
-          for (let indexId in this.checkedNames) {
-            if (this.checkedNames[indexId].checked == true)
-              this.itemPresup.checked.push(this.checkedNames[indexId].id);
-          }
-          this.addLocalStorage();
-          // Una vez agregado el nuevo registro al localstorage reseteamos todas todas las variables
-          console.log("Estamos aqui");
-          this.clearScreen();
-        }
+        // if (!flagControl) {
+        this.addLocalStorage();
+        // Una vez agregado el nuevo registro al localstorage reseteamos todas todas las variables
+        console.log("Estamos aqui");
+        this.initElement();
+        // }
       }
     },
     cargaDataInitial(value) {
+      console.log("cargaDataInitial()");
       this.dataSaved = value;
       console.log(typeof this.dataSaved);
     },
     clear() {
       console.log("clear");
-      this.clearScreen();
       this.modelInput = "";
+      this.initElement();
     },
     cargaInfoData(value) {
-      console.log("cargaInfoData");
-      this.initElement();
+      console.log("cargaInfoData:" + value);
+      // this.initElement();
       if (typeof Storage !== "undefined") {
         var recoverDataLS = JSON.parse(
           localStorage.getItem("listaPresupuesto")
         );
-
         //Recupero del arreglo guardado el registro del idPresupuesto solicitado
-        this.dateSaved = recoverDataLS.find((item) => item.idPresup === value);
+        this.dataSearch = recoverDataLS.find((item) => item.idPresup === value);
+
+        for (let element in this.dataSearch)
+          console.log(this.dataSearch[element]);
 
         //Valido que exista el elemento buscado
-        if (this.dateSaved != undefined) {
-          console.log("dateSaved:" + typeof this.dateSaved);
-          console.log(this.dateSaved);
-          for (let i = 0; i < this.dateSaved.checked.length; i++) {
-            this.checkedNames[this.dateSaved.checked[i]].checked = true;
-            if (this.dateSaved.checked[i] == 0) {
-              this.dataPanel[0] = this.dateSaved.infoDataF.numPages;
-              this.dataPanel[1] = this.dateSaved.infoDataF.numLenguag;
+        if (this.dataSearch != undefined) {
+          console.log("dataSearch:" + typeof this.dataSearch);
+          console.log(this.dataSearch);
+          // for (let i = 0; i < this.dataSearch.checked.length; i++) {
+          this.itemPresup.checkedNames = this.dataSearch.checkedNames;
+          //   if (this.dataSearch.checked[i] == 0) {
+          this.itemPresup.infoDataF.numPages =
+            this.dataSearch.infoDataF.numPages;
+          this.itemPresup.infoDataF.numLenguag =
+            this.dataSearch.infoDataF.numLenguag;
 
-              //De esta forma abro el bloque de numero de paginas y numero de Lenguages
-              if (this.dataPanel[0] > 0 && this.dataPanel[1] > 0)
-                this.flagNum = true;
-              console.log("Entra por alla");
-              console.log(this.dataPanel);
-            }
-          }
-          console.log("Estamos en los ITEMS");
-          this.dataItems[0] = this.dateSaved.idPresup;
-          this.dataItems[1] = this.dateSaved.idClient;
-          console.log("this.flagNum:" + this.flagNum);
+          //     //De esta forma abro el bloque de numero de paginas y numero de Lenguages
+          if (
+            this.itemPresup.infoDataF.numPages > 0 &&
+            this.itemPresup.infoDataF.numLenguag > 0
+          )
+            // this.flagNum = true;
+            //     console.log("Entra por alla");
+            //     console.log(this.dataPanel);
+            //   }
+            // }
+            console.log("Estamos en los ITEMS");
+          this.itemPresup.idPresup = this.dataSearch.idPresup;
+          this.itemPresup.idClient = this.dataSearch.idClient;
+          // console.log("this.flagNum:" + this.flagNum);
+          console.log("Fin de CargaData");
+        } else {
+          console.log("Tiempo de error");
+          this.errSearch = true;
+          // Esto no puede ser porque el scope no seria correcto
+          // setTimeout(function () {
+          //   this.errSearch = false;
+          // }, 1000);
+          setTimeout(() => (this.errSearch = false), 2000);
         }
       }
     },
   },
+  computed: {
+    totalSumA() {
+      let totalPartial = 0;
+      console.log("newSum()");
+      if (
+        this.itemPresup.infoDataF.numPages > 0 &&
+        this.itemPresup.infoDataF.numLenguag > 0 &&
+        this.itemPresup.checkedNames[0].checked == true
+      )
+        totalPartial =
+          this.itemPresup.infoDataF.numPages *
+          this.itemPresup.infoDataF.numLenguag *
+          30;
+
+      for (let indexId in this.itemPresup.checkedNames) {
+        if (this.itemPresup.checkedNames[indexId].checked == true)
+          totalPartial += parseInt(this.itemPresup.checkedNames[indexId].value);
+      }
+      return totalPartial;
+    },
+  },
+  // mounted() {
+  //   this.initElement();
+  // },
 };
 </script>
 <style scoped>

@@ -19,7 +19,6 @@
       <ElementalComp
         idElement="secondElement"
         nameElement="idioma"
-        @newChange="addCantidad"
         index="1"
         idModal="numLenguage"
         v-model="valueLenguageP"
@@ -45,38 +44,24 @@ export default {
       count: 0,
     };
   },
-  methods: {
-    addCantidad(value, index) {
-      this.fieldsPanel[index] = value;
-      this.totalPartial = 1;
-      if (this.fieldsPanel.length === 2) {
-        for (let value of this.fieldsPanel) {
-          if (value === "") value = 0;
-          this.totalPartial *= parseInt(value);
-        }
-        this.totalPartial *= 30;
-        this.$emit("totalAdd", this.totalPartial, this.fieldsPanel);
-      }
-    },
-  },
   computed: {
     valuePageP: {
       get() {
-        console.log("UNOOO1:valuePageP");
+        console.log("get:valuePageP");
         return this.numPageValue;
       },
       set(newValue) {
-        console.log("DOOOOO1:valuePageP" + newValue);
+        console.log("set:valuePageP" + newValue);
         this.$emit("update:numPageValue", newValue);
       },
     },
     valueLenguageP: {
       get() {
-        console.log("UNOOO2:");
+        console.log("get:valueLenguageP");
         return this.numLenguageValue;
       },
       set(newValue) {
-        console.log("DOOOOO2:" + newValue);
+        console.log("set:valueLenguageP" + newValue);
         this.$emit("update:numLenguageValue", newValue);
       },
     },

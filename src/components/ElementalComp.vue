@@ -11,7 +11,6 @@
       size="5"
     />
     <button class="bg-warning border-0" @click="valueField--">-</button>
-
     <!-- Button trigger modal -->
     <button
       :id="idButtonModel"
@@ -86,6 +85,8 @@ export default {
       },
       // Si el numero es negativo, seteo el nuevo valor como 0
       set(newValue) {
+        console.log("set:valueField()");
+
         if (newValue < 0) newValue = 0;
         this.$emit("update:modelValue", newValue);
       },

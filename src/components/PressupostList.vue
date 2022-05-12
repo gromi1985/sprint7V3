@@ -8,7 +8,7 @@
       <p class="mb-0">{{ item.idPresup }}</p>
       <p class="mb-0">{{ item.idClient }}</p>
     </div>
-    <p>Total Registros : {{ totalItemsRead }}</p>
+    <p>Total Registros : {{ regSave.length }}</p>
   </div>
 </template>
 
@@ -23,17 +23,6 @@ export default {
       regSaveCpy: "",
     };
   },
-  // methods: {
-  //   recoveryLocalStorage() {
-  //     if (typeof Storage !== "undefined") {
-  //       this.dataStorage = JSON.parse(localStorage.getItem("listaPresupuesto"));
-  //       if (this.dataStorage != null)
-  //         this.totalItemsRead = this.dataStorage.length;
-  //     }
-
-  //     return this.dataStorage;
-  //   },
-  // },
   mounted() {
     console.log("estamos montando PressupostList...");
     if (typeof Storage !== "undefined") {
